@@ -2,6 +2,8 @@ import React from 'react';
 import Display from './components/Display';
 import Buttons from './components/Buttons';
 import './App.css';
+const nums=[7,8,9,4,5,6,1,2,3,0];
+const ops=['+','-','*','/'];
 
 class App extends React.Component{
   constructor(props){
@@ -15,10 +17,10 @@ class App extends React.Component{
 
   handleKeypress(e){
     const {expression,lastPressed}=this.state;
-    const {value}=e.target;
+    const {innerText}=e.target;
 
-    switch(value){
-      case '':{
+    switch(innerText){
+      case 'Clear':{
         this.setState({
           expression:'0',
         });
@@ -29,8 +31,7 @@ class App extends React.Component{
         const evaluated=eval(expression);
         this.setState({
           expression:evaluated
-        });
-        console.log('sup');
+        })
         break;
       }
 
@@ -48,15 +49,15 @@ class App extends React.Component{
 
       default:{
         let e;
-        if(['+','-','*','/'].includes(value)){
-          if(['+','-','*','/'].includes(lastPressed) && value!=='-'){
-            const lastNumIdx=expression.split('').reverse().findIndex(char=>char!==' ' && [7, 8, 9, 4, 5, 6, 1, 2, 3, 0].includes(+char));
-            e=expression.slice(0,expression.length-lastNumIdx)+value;
+        if(ops.includes(innerText)){
+          if(ops.includes(lastPressed) && innerText!=='-'){
+            const lastNumIdx=expression.split('').reverse().findIndex(char=>char!==' ' && nums.includes(+char));
+            e=expression.slice(0,expression.length-lastNumIdx)+innerText;
           }else{
-            e=`${expression} ${value}`;
+            e=`${expression} ${innerText}`;
           }
         }else{
-          e=(expression==='0')?value:(expression+value);
+          e=(expression==='0')?innerText:(expression+innerText);
         }
 
         this.setState({
@@ -66,7 +67,7 @@ class App extends React.Component{
     }
 
     this.setState({
-      lastPressed:value
+      lastPressed:innerText
     })
   }
 
@@ -74,7 +75,7 @@ class App extends React.Component{
     return(
       <div className='container'>
         <Display value={this.state.expression} />
-        <Buttons input={this.handleKeypress} />
+        <Buttons input={this.handleKeypress} nums={nums} ops={ops} />
       </div>
     )
   }
