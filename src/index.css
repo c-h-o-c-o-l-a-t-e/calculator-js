@@ -64,6 +64,7 @@ h1{
 #clear{
   width: 100%;
   color: #f52757;
+  border:0px solid black!important;
 }
 
 #clear:hover{
